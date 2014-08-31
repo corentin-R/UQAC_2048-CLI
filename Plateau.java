@@ -1,20 +1,31 @@
 //package LabPOO;
 
+//import java.awt.event.KeyEvent;
+//import java.awt.event.KeyListener;
+
 import java.util.Random;
 import java.util.Scanner;
 
 public class Plateau {
 	
+	//taille du tableau
 	private int length;
+	//matrice de int
 	private int board [][];
 	
+	/**
+	*constructeur,
+	*@args taille que devra faire le tableau
+	*/
 	public Plateau(int X)
 	{
 		length=X;
 		board = new int [X][X];
 	}
 	
-	/*Initialize the board by filling it with 0s*/
+	/**
+	*Initialize the board by filling it with 0s
+	*/
 	public void init()
 	{
 		for (int i =0;i<length;i++)
@@ -25,18 +36,33 @@ public class Plateau {
 			}
 		}
 	}
+
+	/**
+	*creer la matrice d'affichage
+	*demande si la partie sera random ou manuelle
+	*boucle de jeu:
+	*-ajoute un nouceau nombre
+	*-affiche le plateau
+	*-demande un cou à jouer
+	*/
 	public void jouer()
 	{
 		CAffichage mAffiche = new CAffichage(length);
-		while(!verifDefaite())
+		//int i =0;
+		int mode = choixMode();
+		while(!verifFinPartie()/* && i<20*/)
 		{
 			nouveauNombre();	
 			mAffiche.dessinerMatriceAffichable(board);
-			jouercoup();
+			jouercoup(mode);
+			//i++;
 		}
 	}
 	
-	
+	/**
+	*méthode pour afficher la matrice de int
+	*pb pour entiers > 9 (décalage)
+	*/
 	public void afficher()
 	{
 		for (int i =0;i<length;i++)
@@ -52,9 +78,15 @@ public class Plateau {
 		}
 		System.out.println("");
 	}
+
+	/**
+	*ajoute un 2 ou un 4 dans une case 
+	*random du tableau
+	*/
 	public void nouveauNombre()
 	{
-		if(!verifDefaite()){
+		if(!verifFinPartie())
+		{
 			//generer un nouveau 2
 			//le placer sur une case aleatoire ou il y a un 0
 			int nb_cases=length*length;
@@ -64,246 +96,290 @@ public class Plateau {
 			int x=place/length;
 			int y=place%length;
 			if(board[x][y] == 0) 
-				board[x][y]=2;
+				board[x][y]=random2ou4();
 			else	
 				nouveauNombre();
 		}
 	}
-	
-	private void jouercoup()
-	{
 
-			/*deplacerLigneDroite(length-1,0);
-			deplacerLigneDroite(length-1,1);
-			deplacerLigneDroite(length-1,2);
-			deplacerLigneDroite(length-1,3);**/
-			System.out.println("\tHaut(8) Bas(2) Droit (6) Gauche (4) :");
-			
-			switch (randomInput())
+	/**
+	*choisit si il fau tplacer un 4 ou un 2
+	*(1/5 -> 4, 4/5 -> 2)
+	*@return 2 ou 4
+	*/
+	private int random2ou4(){
+		Random proportion = new Random();
+		int nb = proportion.nextInt(5);
+		if(nb>=4)
+		{
+			return 4;
+		}
+		else
+			return 2;
+	}
+
+	/**
+	*demande à l'utilisateur si il veut jouer 
+	*en random ou au clavier
+	*@return 1 si random 2 si manuel
+	*/
+	private int choixMode()
+	{
+		System.out.println("\tChoisissez le mode:");
+		System.out.println("\t1- mode automatique (random)");
+		System.out.println("\t2- mode manuel (clavier)");
+		Scanner scan = new Scanner(System.in);			
+		//try catch a implementer pour eviter une exeption
+		int choix = scan.nextInt();
+		if(choix == 1 || choix == 2)
+		{
+			return choix;
+		}
+		else
+		{
+			choixMode();
+			return 1;
+		}
+	}
+	
+	/**
+	*demande une input,
+	*decale tous les nombres, les fusionnent si il faut
+	*puis redécale pour boucher les trous si besoin
+	*@args mode auto (1) ou manuel (2)
+	*/
+	private void jouercoup(int mode)
+	{
+		/*deplacerLigneDroite(length-1,0);
+		deplacerLigneDroite(length-1,1);
+		deplacerLigneDroite(length-1,2);
+		deplacerLigneDroite(length-1,3);**/
+		int ch =0;
+		System.out.println("\tHaut(8) Bas(2) Droit (6) Gauche (4) :");
+		if(mode == 1)
+			ch = randomInput();
+		else if(mode == 2)
+			ch = demandeInput();
+		
+		for(int i=0;i<length;i++)
+		{
+			switch (ch)
 			{
 				case 8:
-				for(int x=0;x<length;x++)deplacerColonneHaut(x,0);		
-					break;
+				deplacerColonneHaut(i,0);
+				fusionnerColonneHaut(i,0);
+				deplacerColonneHaut(i,0);
+				break;
 				case 2:
-				for(int x=0;x<length;x++)deplacerColonneBas(x, length-1);		
-					break;
+				deplacerColonneBas(i, length-1);
+				fusionnerColonneBas(i, length-1);
+				deplacerColonneBas(i, length-1);
+				break;
 				case 6:
-				for(int y=0;y<length;y++)deplacerLigneDroite(length-1,y);
-					break;
+				deplacerLigneDroite(length-1,i);
+				fusionnerLigneDroite(length-1,i);
+				deplacerLigneDroite(length-1,i);
+				break;
 				case 4:
-				for(int y=0;y<length;y++)deplacerLigneGauche(0,y);
-					break;
+				deplacerLigneGauche(0,i);
+				fusionnerLigneGauche(0,i);
+				deplacerLigneGauche(0,i);
+				break;
 				default:
 				System.out.println("\tveuillez rentrez un des 4 chiffres");
 				break;
 			}
-
+		}
 		//deplacer les cases vers une direction
 		//Remplacer les cases qui sont desormais inoccuper par 0
 		//fusionner les cases indentique qui se collisionne.
 		//Attention au nombre de ligne, eventuelement decouper 
 		//en "deplacerLigne" et "deplacerColone"
-		}
-
-		private int demandeInput(){
-			Scanner scan = new Scanner(System.in);			
-			//try catch a implementer pour eviter une exeption
-			return scan.nextInt();
-		}
-
-		private int randomInput(){
-			Random input = new Random();
-			int nb = input.nextInt(4)*2 +2;
-			System.out.println(nb);
-			return nb;
-		}
-
-		private void deplacerLigneDroite(int x,int y)
-		{
-		//test si on est toujours dans le tableau
-			if (x<1 || x>length-1 || y<0 || y>length-1) return;
-		//Si 0 plus a gauche decaller le nombre
-			boolean IsTrue=false;
-			int i=1;
-			while(!IsTrue)
-			{
-				//Si la case teste a gauche est a 0
-				if(board[x-i][y]==0)
-				{
-					if(x-i>0)i++;
-					else IsTrue=true;
-				}
-				else
-				{	
-					//si les 2 cases sont egales
-					if(board[x-i][y]==board[x][y])
-					{
-						board[x][y]+=board[x-i][y];
-						board[x-i][y]=0;
-					}
-					else
-					{
-						//si la case a droite =0
-						if(board[x][y]==0)
-						{
-							board[x][y]=board[x-i][y];
-							board[x-i][y]=0;
-						}
-						else if(i!=1)
-						{		
-							board[x-1][y]=board[x-i][y];
-							board[x-i][y]=0;
-						}
-					}	
-					IsTrue=true;
-				}				
-			}
-			if(x>=0)deplacerLigneDroite(x-1,y);	
-		}
-
-
-
-		private void deplacerLigneGauche(int x,int y)
-		{
-		//test si on est toujours dans le tableau
-			if (x<0|| x>length-2 || y<0 || y>length-1) return;
-		//Si 0 plus a gauche decaller le nombre
-			boolean IsTrue=false;
-			int i=1;
-			while(!IsTrue)
-			{
-				//Si la case teste a gauche est a 0
-				if(board[x+i][y]==0)
-				{
-					if(x+i<length-1)i++;
-					else IsTrue=true;
-				}
-				else
-				{	
-					//si les 2 cases sont egales
-					if(board[x+i][y]==board[x][y])
-					{
-						board[x][y]+=board[x+i][y];
-						board[x+i][y]=0;
-					}
-					else
-					{
-						//si la case a gauche =0
-						if(board[x][y]==0)
-						{
-							board[x][y]=board[x+i][y];
-							board[x+i][y]=0;
-						}
-						else if(i!=1)
-						{		
-							board[x+1][y]=board[x+i][y];
-							board[x+i][y]=0;
-						}
-					}	
-					IsTrue=true;
-				}				
-			}
-			if(x<length-2)deplacerLigneGauche(x+1,y);	
-		}
-		private void deplacerColonneHaut(int x,int y)
-		{
-			//test si on est toujours dans le tableau
-			if (x<0 || x>length-1 || y<0 || y>length-2) return;
-
-			//Si 0 plus a gauche decaller le nombre
-			boolean IsTrue=false;
-			int i=1;
-			while(!IsTrue)
-			{
-				//Si la case teste en bas est a 0
-				if(board[x][y+i]==0)
-				{
-					if(y+i<length-1)i++;
-					else IsTrue=true;
-				}
-				else
-				{	
-					//si les 2 cases sont egales
-					if(board[x][y+i]==board[x][y])
-					{
-						board[x][y]+=board[x][y+i];
-						board[x][y+i]=0;						
-					}
-					else
-					{
-						//si la case en haut =0
-						if(board[x][y]==0)
-						{
-							board[x][y]=board[x][y+i];
-							board[x][y+i]=0;
-						}
-						else if(i!=1)
-						{							
-							board[x][y+1]=board[x][y+i];
-							board[x][y+i]=0;
-						}
-					}
-					IsTrue=true;
-					
-				}					
-			}			
-			
-			if(y<=length-1)deplacerColonneHaut(x,y+1);
-		}
-
-		private void deplacerColonneBas(int x,int y)
-		{
-		//test si on est toujours dans le tableau
-			if (x<0 || x>length-1 || y<1 || y>length-1) return;
-
-		//Si 0 plus a gauche decaller le nombre
-			boolean IsTrue=false;
-			int i=1;
-			while(!IsTrue)
-			{
-				//Si la case teste en haut est a 0
-				if(board[x][y-i]==0)
-				{
-					if(y-i>0)i++;
-					else IsTrue=true;
-				}
-				else
-				{	
-					//si les 2 cases sont egales
-					if(board[x][y-i]==board[x][y])
-					{
-						board[x][y]+=board[x][y-i];
-						board[x][y-i]=0;						
-					}
-					else
-					{
-						//si la case en bas =0
-						if(board[x][y]==0)
-						{
-							board[x][y]=board[x][y-i];
-							board[x][y-i]=0;
-						}
-						else if(i!=1)
-						{							
-							board[x][y-1]=board[x][y-i];
-							board[x][y-i]=0;
-						}
-					}
-					IsTrue=true;
-					
-				}					
-			}			
-			
-			if(y>0)deplacerColonneBas(x,y-1);
-		}
+	}
 
 	/**
-	 * verifDefaite(): fonction qui parcours la matrice pour 
+	*@return le nombre tape au clavier
+	*/
+	private int demandeInput(){
+
+	/*KeyListener listener = new CEvent();
+	addKeyListener(listener);
+	setFocusable(true);*/
+
+	Scanner scan = new Scanner(System.in);			
+	//try catch a implementer pour eviter une exeption
+	return scan.nextInt();
+			//return 2;
+	}
+
+	/**
+	*@return un des 4 chiffres (8,2,4,6) au hasard 
+	*/
+	private int randomInput(){
+		Random input = new Random();
+		int nb = input.nextInt(4)*2 +2;
+		System.out.println(nb);
+		return nb;
+	}
+
+	/**
+	*décale tous les nombres d'une ligne y vers la droie
+	*on commence de la case la plus à droite (x=length-1)
+	*si la case testee est == 0 on passe à la case de gauche
+	*sinon si la case à droite existe et est == 0 
+	*alors on échange la case testee et la case de droite
+	*puis on passe à la case de gauche suivante (méthode récursive)
+	*@args coordonnees de la case a tester
+	*/
+	private void deplacerLigneDroite(int x,int y)
+	{
+		//test si on est toujours dans le tableau
+		if (x<0 || x>length-1 || y<0 || y>length-1) return;
+
+		if(board[x][y]==0)
+			deplacerLigneDroite(x-1,y);
+		else if(x+1 < length && board[x+1][y]==0)
+		{
+			board[x+1][y]=board[x][y];
+			board[x][y]=0;
+		}	
+		deplacerLigneDroite(x-1,y);
+	}
+
+	/**
+	*permet de fusionner les cases d'une ligne quand necessaire
+	*on part de la case la plus a droite de la ligne
+	*si la case à droite existe et est egale à la case testee
+	*alors on fusionne et la case testee devient =0
+	*puis on passe à la case de gauche suivante (méthode récursive)
+	*@args coordonnees de la case a tester
+	*/
+	private void fusionnerLigneDroite(int x,int y)
+	{
+			//test si on est toujours dans le tableau
+		if (x<0 || x>length-1 || y<0 || y>length-1 || board[x][y]==0)
+			return;
+
+		if(x+1 < length && board[x+1][y]==board[x][y])
+		{
+			board[x+1][y]+=board[x][y];
+			board[x][y]=0;
+		}	
+		fusionnerLigneDroite(x-1,y);
+	}
+
+	/**
+	*cf methode deplacerLigneDroite
+	*/
+	private void deplacerLigneGauche(int x,int y)
+	{
+		//test si on est toujours dans le tableau
+		if (x<0 || x>length-1 || y<0 || y>length-1) return;
+
+		if(board[x][y]==0)
+			deplacerLigneGauche(x+1,y);
+		else if(x-1 >=0 && board[x-1][y]==0)
+		{
+			board[x-1][y]=board[x][y];
+			board[x][y]=0;
+		}	
+		deplacerLigneGauche(x+1,y);
+	}
+
+	/**
+	*cf methode fusionnerLigneDroite
+	*/
+	private void fusionnerLigneGauche(int x,int y)
+	{
+			//test si on est toujours dans le tableau
+		if (x<0 || x>length-1 || y<0 || y>length-1 || board[x][y]==0)
+			return;
+
+		if(x-1>=0 && board[x-1][y]==board[x][y])
+		{
+			board[x-1][y]+=board[x][y];
+			board[x][y]=0;
+		}	
+		fusionnerLigneGauche(x+1,y);
+	}
+
+	/**
+	*cf methode deplacerLigneDroite
+	*/
+	private void deplacerColonneHaut(int x,int y)
+	{
+		//test si on est toujours dans le tableau
+		if (x<0 || x>length-1 || y<0 || y>length-1) return;
+
+		if(board[x][y]==0)
+			deplacerColonneHaut(x,y+1);
+		else if(y-1 >=0 && board[x][y-1]==0)
+		{
+			board[x][y-1]=board[x][y];
+			board[x][y]=0;
+		}	
+		deplacerColonneHaut(x,y+1);
+	}
+
+	/**
+	*cf methode fusionnerLigneDroite
+	*/
+	private void fusionnerColonneHaut(int x,int y)
+	{
+			//test si on est toujours dans le tableau
+		if (x<0 || x>length-1 || y<0 || y>length-1 || board[x][y]==0)
+			return;
+
+		if(y-1>=0 && board[x][y-1]==board[x][y])
+		{
+			board[x][y-1]+=board[x][y];
+			board[x][y]=0;
+		}	
+		fusionnerColonneHaut(x,y+1);
+	}
+
+	/**
+	*cf methode deplacerLigneDroite
+	*/
+	private void deplacerColonneBas(int x,int y)
+	{
+		//test si on est toujours dans le tableau
+		if (x<0 || x>length-1 || y<0 || y>length-1) return;
+
+		if(board[x][y]==0)
+			deplacerColonneBas(x,y-1);
+		else if(y+1 < length && board[x][y+1]==0)
+		{
+			board[x][y+1]=board[x][y];
+			board[x][y]=0;
+		}	
+		deplacerColonneBas(x,y-1);
+	}
+
+	/**
+	*cf methode fusionnerLigneDroite
+	*/
+	private void fusionnerColonneBas(int x,int y)
+	{
+			//test si on est toujours dans le tableau
+		if (x<0 || x>length-1 || y<0 || y>length-1 || board[x][y]==0)
+			return;
+
+		if(y+1< length && board[x][y+1]==board[x][y])
+		{
+			board[x][y+1]+=board[x][y];
+			board[x][y]=0;
+		}	
+		fusionnerColonneBas(x,y-1);
+	}
+
+	/**
+	 * verifFinPartie(): fonction qui parcours la matrice pour 
 	 * verifier si il n'y a plus de cases de libre et que
 	 *  la tuile 2048 n'as pas ete atteinte
 	 * @return true si la partie est finie
 	 */
-	private boolean verifDefaite(){
+	private boolean verifFinPartie(){
 		int compteurCasesVides = 0;
 		for(int i=0;i<length; i++)
 		{

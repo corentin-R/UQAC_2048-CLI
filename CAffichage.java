@@ -44,6 +44,7 @@ class CAffichage {
 	public void dessinerMatriceAffichable(int[][] matrice){
 		remplirCases(matrice);
 		//TODO System.clear(); -->clearscreen à implémenter
+		clearConsole();
 		for(int i=0;i<hauteurMatriceAffichable;i++)
 		{
 			System.out.print("\t");
@@ -129,20 +130,43 @@ class CAffichage {
 
 		if(nb>=1000)
 			matriceAffichable[i*hauteurCase+3][j*largeurCase+3] 
-			= (char)(nb/1000+48);
+		= (char)(nb/1000+48);
 		else matriceAffichable[i*hauteurCase+3][j*largeurCase+3] = ' ';
 		if(nb>=100)
 			matriceAffichable[i*hauteurCase+3][j*largeurCase+4] 
-			= (char)(nb%1000/100+48);
+		= (char)(nb%1000/100+48);
 		else matriceAffichable[i*hauteurCase+3][j*largeurCase+4] = ' ';
 		if(nb>=10)
 			matriceAffichable[i*hauteurCase+3][j*largeurCase+5] 
-			= (char)(nb%1000%100/10+48);
+		= (char)(nb%1000%100/10+48);
 		else matriceAffichable[i*hauteurCase+3][j*largeurCase+5] = ' ';
 		if(nb>=1)
 			matriceAffichable[i*hauteurCase+3][j*largeurCase+6] 
-			= (char)(nb%1000%100%10+48);
+		= (char)(nb%1000%100%10+48);
 		else matriceAffichable[i*hauteurCase+3][j*largeurCase+6] = ' ';
+	}
+	private void clearConsole()
+	{
+		
+		/*try
+		{
+			final String os = System.getProperty("os.name");
+			System.out.println(os);
+			if (os.contains("Windows"))
+			{
+				Runtime.getRuntime().exec("cls");
+			}
+			else
+			{
+				//Runtime.getRuntime().exec("clear");
+				System.out.print((char)27 + "[2J");
+				//System.out.println("cvbggggggggggggggggggggg");	
+			}
+		}
+		catch (final Exception e)
+		{
+        //  Handle any exceptions.
+		}*/
 	}
 
 }
