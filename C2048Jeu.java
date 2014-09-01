@@ -17,7 +17,8 @@ public class C2048Jeu {
 	}
 
 	/**
-	 * demande à l'utilistateur un nombre entier
+	 * demande a l'utilistateur un nombre entier
+	 * demande a l'utilistateur un nombre entier
 	 * 
 	 * @return un chiffre positif qui sera la taille du tableau
 	 */

@@ -38,8 +38,9 @@ public class Plateau {
 	/**
 	 * creer la matrice d'affichage demande si la partie sera random
 	 * ou manuelle boucle de jeu: -ajoute un nouceau nombre -affiche
+ 	 * le plateau -demande un cou a jouer
 	 * le plateau -demande un cou à jouer
-	 */
+ 	 */
 	public void jouer() {
 		CAffichage mAffiche = new CAffichage(length);
 		// int i =0;
@@ -53,6 +54,7 @@ public class Plateau {
 	}
 
 	/**
+	 * methode pour afficher la matrice de int pb pour entiers > 9
 	 * méthode pour afficher la matrice de int pb pour entiers > 9
 	 * (décalage)
 	 */
@@ -106,8 +108,9 @@ public class Plateau {
 	}
 
 	/**
+ 	 * demande a l'utilisateur si il veut jouer en random ou au
 	 * demande à l'utilisateur si il veut jouer en random ou au
-	 * clavier
+ 	 * clavier
 	 *
 	 * @return 1 si random 2 si manuel
 	 */
@@ -134,6 +137,7 @@ public class Plateau {
 
 	/**
 	 * demande une input, decale tous les nombres, les fusionnent si
+ 	 * il faut puis redecale pour boucher les trous si besoin
 	 * il faut puis redécale pour boucher les trous si besoin
 	 *
 	 * @args mode auto (1) ou manuel (2)
@@ -219,11 +223,15 @@ public class Plateau {
 
 	/**
 	 * decale tous les nombres d'une ligne y vers la droie on
-	 * commence de la case la plus a� droite (x=length-1) si la case
+ 	 * commence de la case la plus a droite (x=length-1) si la case
+	 * testee est == 0 on passe a la case de gauche sinon si la case
+	 * a droite existe et est == 0 alors on echange la case testee
+	 * et la case de droite puis on passe a la case de gauche
+	 * commence de la case la plus a droite (x=length-1) si la case
 	 * testee est == 0 on passe à la case de gauche sinon si la case
 	 * à droite existe et est == 0 alors on échange la case testee
 	 * et la case de droite puis on passe à la case de gauche
-	 * suivante (methode recursive)
+ 	 * suivante (methode recursive)
 	 *
 	 * @args coordonnees de la case a tester
 	 */
@@ -243,9 +251,12 @@ public class Plateau {
 
 	/**
 	 * permet de fusionner les cases d'une ligne quand necessaire on
+ 	 * part de la case la plus a droite de la ligne si la case a
+	 * droite existe et est egale a la case testee alors on fusionne
+	 * et la case testee devient =0 puis on passe a la case de gauche
 	 * part de la case la plus a droite de la ligne si la case à
-	 * droite existe et est egale a� la case testee alors on fusionne
-	 * et la case testee devient =0 puis on passe a� la case de gauche
+	 * droite existe et est egale a la case testee alors on fusionne
+	 * et la case testee devient =0 puis on passe a la case de gauche
 	 * suivante (methode recursive)
 	 *
 	 * @args coordonnees de la case a tester

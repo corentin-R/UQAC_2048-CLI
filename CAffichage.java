@@ -1,5 +1,8 @@
 //package LabPOO;
 
+
+import java.io.IOException;
+
 class CAffichage {
 
 	// matrice de char qu'on affichera
@@ -18,8 +21,11 @@ class CAffichage {
 		tailleMatrice = 4;
 		hauteurMatriceAffichable = hauteurCase * tailleMatrice + 1;
 		largeurMatriceAffichable = largeurCase * tailleMatrice + 1;
+		matriceAffichable = new char[hauteurMatriceAffichable][largeurMatriceAffichable];
+
 		matriceAffichable 
 		= new char[hauteurMatriceAffichable][largeurMatriceAffichable];
+
 	}
 
 	/**
@@ -31,12 +37,16 @@ class CAffichage {
 		tailleMatrice = taille;
 		hauteurMatriceAffichable = hauteurCase * tailleMatrice + 1;
 		largeurMatriceAffichable = largeurCase * tailleMatrice + 1;
+		matriceAffichable = new char[hauteurMatriceAffichable][largeurMatriceAffichable];
+
 		matriceAffichable 
 		= new char[hauteurMatriceAffichable][largeurMatriceAffichable];
 		initialiserMatrice();
 	}
 
 	/**
+	 * fonction permettant de transformer la matrice int[][] de base
+	 * en une matrice de char[][] plus jolie à afficher
 	 * fonction permettant de transformer la matrice int[][] de base en une
 	 * matrice de char[][] plus jolie à afficher
 	 *
@@ -45,7 +55,11 @@ class CAffichage {
 	public void dessinerMatriceAffichable(int[][] matrice) {
 		remplirCases(matrice);
 		// TODO System.clear(); -->clearscreen à implementer
+
 		clearConsole();
+		
+		System.out.print("\n\n");
+
 		for (int i = 0; i < hauteurMatriceAffichable; i++) {
 			System.out.print("\t");
 			for (int j = 0; j < largeurMatriceAffichable; j++)
@@ -56,6 +70,8 @@ class CAffichage {
 	}
 
 	/**
+	 * remplit les ligne appropriees (hauteurMatrice%hauteurCase) avec
+	 * des char '-'
 	 * remplit les ligne appropriees (hauteurMatrice%hauteurCase) 
 	 * avec des char '-'
 	 */
@@ -102,6 +118,8 @@ class CAffichage {
 	}
 
 	/**
+	 * met les chiifres de la matrice de base dans la matrice de char
+	 * qui sera affichee
 	 * met les chiifres de la matrice de base dans la matrice de char qui sera
 	 * affichee
 	 *
@@ -115,6 +133,10 @@ class CAffichage {
 	}
 
 	/**
+	 * decompose un nombre en chiffre par unite, dizaine, centaine et
+	 * millier et les place au bons endroits transformation d'un int
+	 * en plusieur char avce la table ASCII (+48) c'est sale mais ça
+	 * marche
 	 * decompose un nombre en chiffre par unite, dizaine, centaine et millier
 	 * et les place au bons endroits transformation d'un int en plusieur char
 	 * avce la table ASCII (+48) c'est sale mais ça marche
@@ -124,37 +146,53 @@ class CAffichage {
 	private void decomposerNb(int nb, int i, int j) {
 
 		if (nb >= 1000)
-			matriceAffichable[i * hauteurCase + 3][j * largeurCase + 3]
-					= (char) (nb / 1000 + 48);
+			matriceAffichable[i * hauteurCase + 3][j * largeurCase
+					+ 3] = (char) (nb / 1000 + 48);
 		else
-			matriceAffichable[i * hauteurCase + 3][j * largeurCase + 3] = ' ';
+			matriceAffichable[i * hauteurCase + 3][j * largeurCase
+					+ 3] = ' ';
 		if (nb >= 100)
-			matriceAffichable[i * hauteurCase + 3][j * largeurCase + 4] 
-					= (char) (nb % 1000 / 100 + 48);
+			matriceAffichable[i * hauteurCase + 3][j * largeurCase
+					+ 4] = (char) (nb % 1000 / 100 + 48);
 		else
-			matriceAffichable[i * hauteurCase + 3][j * largeurCase + 4] = ' ';
+			matriceAffichable[i * hauteurCase + 3][j * largeurCase
+					+ 4] = ' ';
 		if (nb >= 10)
-			matriceAffichable[i * hauteurCase + 3][j * largeurCase + 5] 
-					= (char) (nb % 1000 % 100 / 10 + 48);
+			matriceAffichable[i * hauteurCase + 3][j * largeurCase
+					+ 5] = (char) (nb % 1000 % 100 / 10 + 48);
 		else
-			matriceAffichable[i * hauteurCase + 3][j * largeurCase + 5] = ' ';
+			matriceAffichable[i * hauteurCase + 3][j * largeurCase
+					+ 5] = ' ';
 		if (nb >= 1)
-			matriceAffichable[i * hauteurCase + 3][j * largeurCase + 6]
-					= (char) (nb % 1000 % 100 % 10 + 48);
+			matriceAffichable[i * hauteurCase + 3][j * largeurCase
+					+ 6] = (char) (nb % 1000 % 100 % 10 + 48);
 		else
-			matriceAffichable[i * hauteurCase + 3][j * largeurCase + 6] = ' ';
+			matriceAffichable[i * hauteurCase + 3][j * largeurCase
+					+ 6] = ' ';
 	}
 
 	private void clearConsole() {
-
 		/*
 		 * try { final String os = System.getProperty("os.name");
 		 * System.out.println(os); if (os.contains("Windows")) {
 		 * Runtime.getRuntime().exec("cls"); } else {
-		 * //Runtime.getRuntime().exec("clear"); System.out.print((char)27 +
-		 * "[2J"); //System.out.println("cvbggggggggggggggggggggg"); } } catch
+		 * //Runtime.getRuntime().exec("clear");
+		 * System.out.print((char)27 + "[2J");
+		 * //System.out.println("cvbggggggggggggggggggggg"); } } catch
 		 * (final Exception e) { // Handle any exceptions. }
 		 */
+		System.out.print("\033[H\033[2J");
+		try {
+			Process exitCode;
+			if (System.getProperty("os.name").startsWith("Window")) {
+				exitCode = Runtime.getRuntime().exec("cls");
+			} else {
+				exitCode = Runtime.getRuntime().exec("clear");
+			}
+		} catch (IOException e) {
+			for (int i = 0; i < 1000; i++) {
+				System.out.println();
+			}
+		}
 	}
-
 }
