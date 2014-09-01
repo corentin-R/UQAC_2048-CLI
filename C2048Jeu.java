@@ -7,7 +7,7 @@ public class C2048Jeu {
 
 	public static void main(String[] args) {
 
-		System.out.println("\t Choisissez la taille du Plateau\n");
+		System.out.print("\tChoisissez la taille du Plateau : ");
 		int X = 0;
 		X = demandeTaillePlateau();
 

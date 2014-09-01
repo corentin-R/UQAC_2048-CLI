@@ -115,16 +115,16 @@ public class Plateau {
 	 * @return 1 si random 2 si manuel
 	 */
 	private int choixMode() {
-		System.out.println("\tChoisissez le mode:");
+		System.out.println("\n\tChoisissez le mode:");
 		System.out.println("\t1- mode automatique (random)");
-		System.out.println("\t2- mode manuel (clavier)");
+		System.out.print("\t2- mode manuel (clavier) \n \t");
 		Scanner scan = new Scanner(System.in);
 
 		int choix;
 		try {
 			choix = scan.nextInt();
 		} catch (InputMismatchException e) {
-			System.out.println("ce n'est pas un nombre");
+			System.out.println("\n\tce n'est pas un nombre\n ");
 			choix = choixMode();
 		}
 		if (choix == 1 || choix == 2) {
@@ -150,7 +150,7 @@ public class Plateau {
 		 * deplacerLigneDroite(length-1,3);*
 		 */
 		int ch = 0;
-		System.out.println("\tHaut(8) Bas(2) Droit (6) Gauche (4) :");
+		System.out.print("\tHaut(8) Bas(2) Droit (6) Gauche (4) :  ");
 		if (mode == 1)
 			ch = randomInput();
 		else if (mode == 2)
