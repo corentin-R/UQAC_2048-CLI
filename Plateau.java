@@ -13,6 +13,7 @@ public class Plateau {
 	private int length;
 	// matrice de int
 	private int board[][];
+	int score;
 
 	/**
 	 * constructeur,
@@ -22,6 +23,7 @@ public class Plateau {
 	public Plateau(int X) {
 		length = X;
 		board = new int[X][X];
+		score =0;
 	}
 
 	/**
@@ -140,16 +142,12 @@ public class Plateau {
  	 * il faut puis redecale pour boucher les trous si besoin
 	 * il faut puis redécale pour boucher les trous si besoin
 	 *
-	 * @args mode auto (1) ou manuel (2)
+	 * @param mode
 	 */
 	private void jouercoup(int mode) {
-		/*
-		 * deplacerLigneDroite(length-1,0);
-		 * deplacerLigneDroite(length-1,1);
-		 * deplacerLigneDroite(length-1,2);
-		 * deplacerLigneDroite(length-1,3);*
-		 */
+
 		int ch = 0;
+		System.out.println("\tscore : "+score);
 		System.out.print("\tHaut(8) Bas(2) Droit (6) Gauche (4) :  ");
 		if (mode == 1)
 			ch = randomInput();
@@ -179,8 +177,8 @@ public class Plateau {
 				deplacerLigneGauche(0, i);
 				break;
 			default:
-				System.out
-						.println("\tveuillez rentrez un des 4 chiffres");
+				if(i==1)
+					System.out.println("\tveuillez rentrez un des 4 chiffres");
 				break;
 			}
 		}
@@ -268,7 +266,7 @@ public class Plateau {
 			return;
 
 		if (x + 1 < length && board[x + 1][y] == board[x][y]) {
-			board[x + 1][y] += board[x][y];
+			score+=board[x + 1][y] += board[x][y];
 			board[x][y] = 0;
 		}
 		fusionnerLigneDroite(x - 1, y);
@@ -301,7 +299,7 @@ public class Plateau {
 			return;
 
 		if (x - 1 >= 0 && board[x - 1][y] == board[x][y]) {
-			board[x - 1][y] += board[x][y];
+			score+=board[x - 1][y] += board[x][y];
 			board[x][y] = 0;
 		}
 		fusionnerLigneGauche(x + 1, y);
@@ -334,7 +332,7 @@ public class Plateau {
 			return;
 
 		if (y - 1 >= 0 && board[x][y - 1] == board[x][y]) {
-			board[x][y - 1] += board[x][y];
+			score+=board[x][y - 1] += board[x][y];
 			board[x][y] = 0;
 		}
 		fusionnerColonneHaut(x, y + 1);
@@ -367,17 +365,17 @@ public class Plateau {
 			return;
 
 		if (y + 1 < length && board[x][y + 1] == board[x][y]) {
-			board[x][y + 1] += board[x][y];
+			score+=board[x][y + 1] += board[x][y];
 			board[x][y] = 0;
 		}
 		fusionnerColonneBas(x, y - 1);
 	}
 
 	/**
-	 * verifFinPartie(): fonction qui parcours la matrice pour
+	 *  fonction qui parcours la matrice pour
 	 * verifier si il n'y a plus de cases de libre et que la tuile
 	 * 2048 n'as pas ete atteinte
-	 * 
+	 *
 	 * @return true si la partie est finie
 	 */
 	private boolean verifFinPartie() {
@@ -396,7 +394,8 @@ public class Plateau {
 			System.out.println("\tDesole vous avez perdu!!");
 			return true;
 		} else
-			return false;
+		return false;
 	}
+
 
 }

@@ -26,7 +26,7 @@ echo "\n\tfin du jeu\n"
 while true; do
     read -p "        voulez-vous refaire une partie (oui/non)? " yn
     case $yn in
-        [Oo]* ) ./run2048.sh ; break;;
+        [YyOo]* ) ./run2048.sh ; break;;
         [Nn]* ) clear ; exit;;
         * ) echo "\t repondez par oui ou non svp.";;
     esac
