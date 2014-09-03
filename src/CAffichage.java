@@ -1,4 +1,4 @@
-//package LabPOO;
+package src;
 
 
 import java.io.IOException;
