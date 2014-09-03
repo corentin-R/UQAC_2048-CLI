@@ -1,6 +1,6 @@
 #!/bin/sh
 
-rm *.class
+rm src/*.class
 clear
 echo "
 \t    ___   ____  __ __  ____    
@@ -10,15 +10,15 @@ echo "
 \t /____/\____/  /_/  \____/      
                            "
 
-if  !(ls | grep class >> game.log) ; then
+if  !(ls src | grep class >> game.log) ; then
 	echo "\n\tCompilation..."
-	javac C2048Jeu.java
+	javac src/C2048Jeu.java
 	else
 		echo  "compilation déjà faite" >> game.log
 fi
 
 echo "\n\tlancement du jeu\n"
-java C2048Jeu
+java src/C2048Jeu
 echo "\n\tfin du jeu\n"
 #sleep 2
 

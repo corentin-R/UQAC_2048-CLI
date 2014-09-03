@@ -16,5 +16,5 @@ cette commande compilera le programme si besoin puis l'éxécutera.
 -------------------
 voici quelques screenshots du jeu:
 
-![début](screenshot_begin.png)
-![jeu](screenshot_game.png)
+![début](img/screenshot_begin.png)
+![jeu](img/screenshot_game.png)
