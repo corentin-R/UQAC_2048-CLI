@@ -11,3 +11,10 @@ se placer dans le répertoire et taper
 ./run2048.sh
 ```
 cette commande compilera le programme si besoin puis l'éxécutera.
+
+
+-------------------
+voici quelques screenshots du jeu:
+
+![début](screenshot_begin.png)
+![jeu](screenshot_game.png)
