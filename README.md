@@ -1,11 +1,11 @@
 ### 2048 MODE TERMINAL
 ### cours POO - UQAC
 
-####Présentation
+#### Présentation
 Mini projet dans le cardre du cours de Programmation Orientée Objet de l'UQAC (8INF957) avec Steven Fougeron et Yannis M'Rad.
 Le programme étant en java il nécéssite java 1.7 (sun ou openjdk-7-jdk)
 
-#### lancement
+#### Lancement
 se placer dans le répertoire et taper
 ```bash
 ./run2048.sh
